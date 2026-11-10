@@ -203,6 +203,7 @@ function renderDash() {
 
 /* ---------- 5. TAREFAS ---------- */
 let dlgCtx = null;
+let taskCategory = 'Geral';
 function openTask(ctx) {
   dlgCtx = ctx;
   const f = $('#formTask').elements, t = ctx.task || {};
@@ -218,7 +219,15 @@ function openTask(ctx) {
 
 function renderTasks() {
   const st = $('#fStatus').value, so = $('#fSort').value;
-  let l = S.tasks.filter(t => st === 'todas' || (st === 'pendentes' ? !t.done : t.done));
+  let l = S.tasks.filter(t =>
+    (taskCategory === 'Geral' || t.cat === taskCategory) &&
+    (st === 'todas' || (st === 'pendentes' ? !t.done : t.done))
+  );
+  $$('.task-category').forEach(b => {
+    const selected = b.dataset.cat === taskCategory;
+    b.setAttribute('aria-selected', String(selected));
+    b.classList.toggle('is-active', selected);
+  });
   l.sort((a, b) => (a.done - b.done) ||
     (so === 'prioridade' ? PO[a.prio] - PO[b.prio] || (a.date || '9').localeCompare(b.date || '9')
       : (a.date || '9').localeCompare(b.date || '9') || PO[a.prio] - PO[b.prio]));
@@ -476,6 +485,12 @@ $('#formTask').addEventListener('submit', e => {
 });
 $('#newTask').onclick = () => openTask({ heading: 'Nova tarefa' });
 $('#fStatus').onchange = $('#fSort').onchange = renderTasks;
+$$('.task-category').forEach(b => {
+  b.addEventListener('click', () => {
+    taskCategory = b.dataset.cat;
+    renderTasks();
+  });
+});
 
 $('#formAg').addEventListener('submit', e => {
   e.preventDefault();
