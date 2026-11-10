@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Um passo de cada vez</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Pular para o conteúdo</a>
+
+<div class="app">
+  <!-- ===== MENU ===== -->
+  <nav class="side" aria-label="Menu principal">
+    <div class="brand"><span aria-hidden="true"><img src="icon.svg" alt="" class="brand-icon"></span><span>Um passo de cada vez</span></div>
+    <a href="#inicio" data-p="inicio"><i aria-hidden="true">🏠</i><span>Início</span></a>
+    <a href="#agenda" data-p="agenda"><i aria-hidden="true">🗓️</i><span>Agenda</span></a>
+    <a href="#tarefas" data-p="tarefas"><i aria-hidden="true">✅</i><span>Tarefas</span></a>
+    <a href="#foco" data-p="foco"><i aria-hidden="true">⏱️</i><span>Foco</span></a>
+    <a href="#quebre" data-p="quebre"><i aria-hidden="true">🧩</i><span>Quebre</span></a>
+    <a href="#calendario" data-p="calendario"><i aria-hidden="true">📅</i><span>Calendário</span></a>
+    <a href="#despejo" data-p="despejo"><i aria-hidden="true">💭</i><span>Ideias</span></a>
+    <button id="themeBtn" type="button" class="themebtn" aria-pressed="false"><i aria-hidden="true">🌙</i><span>Tema escuro</span></button>
+  </nav>
+
+  <main id="main">
+    <!-- ===== 1. INÍCIO ===== -->
+    <section id="inicio" class="page" aria-labelledby="greet">
+      <header class="top">
+        <h1 id="greet" tabindex="-1">Olá! Vamos organizar seu dia?</h1>
+        <p id="dateTxt" class="muted"></p>
+      </header>
+
+      <div class="card">
+        <h2>Como você está hoje?</h2>
+        <div class="moods" id="moods" role="group" aria-label="Como você está hoje?"></div>
+        <p id="moodMsg" class="lead"></p>
+        <p id="moodTip" class="tip"></p>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>Seu progresso de hoje</h2>
+          <p id="progTxt" class="lead"></p>
+          <div class="bar" id="progBar" role="progressbar" aria-label="Progresso de hoje" aria-valuemin="0" aria-valuemax="100"><div id="progFill"></div></div>
+          <p id="progPct" class="muted"></p>
+          <p id="progMsg"></p>
+        </div>
+        <div class="card">
+          <h2>Resumo de tarefas</h2>
+          <div class="stats" id="sum"></div>
+          <a class="btn ghost" href="#tarefas">Ver tarefas</a>
+        </div>
+        <div class="card">
+          <h2>Compromissos</h2>
+          <div class="next-list-head">
+            <strong id="nextListTitle">Seus próximos compromissos</strong>
+            <button type="button" class="text-btn" data-act="clearDashDate" hidden>Ver próximos</button>
+          </div>
+          <ul class="list" id="next"></ul>
+        </div>
+        <div class="card">
+          <h2>Foco rápido</h2>
+          <p class="muted">Um bloco de concentração, sem pressa.</p>
+          <a class="btn" href="#foco">Abrir temporizador</a>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>Despejo mental</h2>
+          <label for="quick" class="sr">Anotação rápida</label>
+          <textarea id="quick" rows="3" placeholder="Algo na cabeça? Escreva aqui."></textarea>
+          <button type="button" id="quickSave" class="btn">Salvar anotação</button>
+        </div>
+        <div class="card">
+          <h2>Atalhos</h2>
+          <div class="short">
+            <a class="btn ghost" href="#agenda">Minha agenda</a>
+            <a class="btn ghost" href="#quebre">Quebre sua tarefa</a>
+            <a class="btn ghost" href="#calendario">Calendário</a>
+          </div>
+          <p id="quote" class="muted quote"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 2. AGENDA + LEMBRETES ===== -->
+    <section id="agenda" class="page" aria-labelledby="h-agenda" hidden>
+      <header class="top"><h1 id="h-agenda" tabindex="-1">Minha agenda</h1><p class="muted">Um passo de cada vez.</p></header>
+      <div class="card">
+        <h2 id="agFormTitle">Nova atividade</h2>
+        <form id="formAg" class="form">
+          <label>Data<input type="date" id="agDate" required></label>
+          <label>Início<input type="time" id="agTime" required></label>
+          <label class="wide">Atividade<input type="text" id="agTitle" required maxlength="80" placeholder="Ex.: Almoço com a família"></label>
+          <label class="wide">Descrição curta (opcional)<input type="text" id="agDesc" maxlength="140"></label>
+          <div class="row wide"><button class="btn" type="submit" id="agBtn">Adicionar</button><button class="btn ghost" type="button" id="agCancel" hidden>Cancelar edição</button></div>
+        </form>
+      </div>
+      <div class="card">
+        <div class="head"><h2>Atividades do dia</h2><label class="inline">Dia<input type="date" id="agView"></label></div>
+        <ul class="timeline" id="agList"></ul>
+      </div>
+
+      <div class="card">
+        <h2 id="rmFormTitle">Novo lembrete</h2>
+        <form id="formRem" class="form">
+          <label class="wide">Título<input type="text" id="rmTitle" required maxlength="80"></label>
+          <label>Data<input type="date" id="rmDate" required></label>
+          <label>Horário<input type="time" id="rmTime" required></label>
+          <label class="wide">Descrição (opcional)<input type="text" id="rmDesc" maxlength="140"></label>
+          <div class="row wide"><button class="btn" type="submit" id="rmBtn">Salvar lembrete</button><button class="btn ghost" type="button" id="rmCancel" hidden>Cancelar edição</button></div>
+        </form>
+        <h2>Meus lembretes</h2>
+        <ul class="list" id="rmList"></ul>
+      </div>
+    </section>
+
+    <!-- ===== 3. TAREFAS ===== -->
+    <section id="tarefas" class="page" aria-labelledby="h-tarefas" hidden>
+      <header class="top"><h1 id="h-tarefas" tabindex="-1">Minhas tarefas</h1><p class="muted">Você não precisa fazer tudo de uma vez.</p></header>
+      <div class="card">
+        <div class="head">
+          <button class="btn" type="button" id="newTask">Nova tarefa</button>
+          <div class="row">
+            <label class="inline">Mostrar<select id="fStatus"><option value="todas">Todas</option><option value="pendentes">Pendentes</option><option value="concluidas">Concluídas</option></select></label>
+            <label class="inline">Ordenar<select id="fSort"><option value="data">Por data</option><option value="prioridade">Por prioridade</option></select></label>
+          </div>
+        </div>
+        <ul class="list" id="taskList"></ul>
+      </div>
+    </section>
+
+    <!-- ===== 4. FOCO ===== -->
+    <section id="foco" class="page" aria-labelledby="h-foco" hidden>
+      <header class="top"><h1 id="h-foco" tabindex="-1">Foco</h1><p class="muted">Pequenos progressos também são progressos.</p></header>
+      <div class="card center">
+        <div class="tabs" role="group" aria-label="Tipo de temporizador">
+          <button type="button" class="tab" data-m="f">Foco</button>
+          <button type="button" class="tab" data-m="s">Pausa curta</button>
+          <button type="button" class="tab" data-m="l">Pausa longa</button>
+        </div>
+        <p id="tmClock" class="clock" role="timer" aria-live="off">25:00</p>
+        <div class="bar"><div id="tmFill"></div></div>
+        <div class="row c">
+          <button class="btn" type="button" id="tmStart">Iniciar</button>
+          <button class="btn ghost" type="button" id="tmPause">Pausar</button>
+          <button class="btn ghost" type="button" id="tmReset">Reiniciar</button>
+        </div>
+        <p id="tmMsg" class="lead" role="status">Vamos começar por algo simples?</p>
+      </div>
+      <div class="card">
+        <h2>Personalizar tempos (minutos)</h2>
+        <div class="form">
+          <label>Foco<input type="number" id="cfF" min="1" max="180"></label>
+          <label>Pausa curta<input type="number" id="cfS" min="1" max="60"></label>
+          <label>Pausa longa<input type="number" id="cfL" min="1" max="90"></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 5. QUEBRE SUA TAREFA ===== -->
+    <section id="quebre" class="page" aria-labelledby="h-quebre" hidden>
+      <header class="top"><h1 id="h-quebre" tabindex="-1">Quebre sua tarefa</h1><p class="muted">Vamos começar por algo simples? Escolha só a primeira ação.</p></header>
+      <div class="card">
+        <form id="formProj" class="row grow-row">
+          <label class="grow">Tarefa grande<input type="text" id="prTitle" required maxlength="80" placeholder="Ex.: Organizar o quarto"></label>
+          <button class="btn" type="submit">Criar tarefa principal</button>
+        </form>
+      </div>
+      <div id="projList"></div>
+    </section>
+
+    <!-- ===== 6. CALENDÁRIO ===== -->
+    <section id="calendario" class="page calendar-page" aria-labelledby="h-cal" hidden>
+      <header class="top calendar-top"><div><span class="eyebrow">ORGANIZE SUA ROTINA</span><h1 id="h-cal" tabindex="-1">Meu calendário</h1><p id="calRange" class="muted"></p></div></header>
+      <div class="calendar-layout">
+        <section class="calendar-board" aria-label="Calendário mensal">
+          <div class="month-toolbar">
+            <button class="month-arrow" type="button" id="calPrev" aria-label="Mês anterior">‹</button>
+            <h2 id="calMonthTitle">Mês</h2>
+            <button class="month-arrow" type="button" id="calNext" aria-label="Próximo mês">›</button>
+          </div>
+          <div class="calendar-weekdays"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
+          <div class="month-grid" id="week"></div>
+          <div class="calendar-foot"><span class="event-dot"></span> Dia com compromisso <button type="button" id="calNow" class="today-link">Ir para hoje</button></div>
+        </section>
+        <aside class="day-agenda" aria-live="polite">
+          <span class="eyebrow">SUA AGENDA</span>
+          <h2 id="selectedDateTitle">Selecione um dia</h2>
+          <div id="selectedDayEvents" class="selected-events"></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===== 7. DESPEJO MENTAL ===== -->
+    <section id="despejo" class="page" aria-labelledby="h-desp" hidden>
+      <header class="top"><h1 id="h-desp" tabindex="-1">Despejo mental</h1><p class="muted">Tire da cabeça. Organize depois, se quiser.</p></header>
+      <div class="card">
+        <form id="formNote">
+          <label for="noteTxt" class="sr">Nova anotação</label>
+          <textarea id="noteTxt" rows="4" required placeholder="Escreva livremente..."></textarea>
+          <button class="btn" type="submit">Salvar anotação</button>
+        </form>
+      </div>
+      <div class="notes" id="noteList"></div>
+    </section>
+  </main>
+</div>
+
+<div id="alerts" aria-live="polite"></div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<!-- Janela de tarefa (nova, editar e anotação → tarefa) -->
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <form id="formTask" class="form">
+    <h2 id="dlgTitle" class="wide">Tarefa</h2>
+    <label class="wide">Nome<input type="text" name="title" required maxlength="100"></label>
+    <label class="wide">Descrição (opcional)<textarea name="desc" rows="2"></textarea></label>
+    <label>Data<input type="date" name="date"></label>
+    <label>Prioridade<select name="prio"><option value="baixa">Baixa</option><option value="media" selected>Média</option><option value="alta">Alta</option></select></label>
+    <label class="wide">Categoria<select name="cat"><option>Pessoal</option><option>Casa</option><option>Estudos</option><option>Trabalho</option><option>Saúde</option><option>Outros</option></select></label>
+    <div class="row wide"><button class="btn" type="submit">Salvar tarefa</button><button class="btn ghost" type="button" data-act="close">Cancelar</button></div>
+  </form>
+</dialog>
+
+<script src="script.js"></script>
+</body>
+</html>
