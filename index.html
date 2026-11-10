@@ -122,7 +122,16 @@
     <section id="tarefas" class="page" aria-labelledby="h-tarefas" hidden>
       <header class="top"><h1 id="h-tarefas" tabindex="-1">Minhas tarefas</h1><p class="muted">Você não precisa fazer tudo de uma vez.</p></header>
       <div class="card">
-        <div class="head">
+        <nav class="task-categories" aria-label="Filtrar tarefas por categoria" role="tablist">
+          <button type="button" class="task-category" data-cat="Geral" role="tab" aria-selected="true">Geral</button>
+          <button type="button" class="task-category" data-cat="Pessoal" role="tab" aria-selected="false">Pessoal</button>
+          <button type="button" class="task-category" data-cat="Casa" role="tab" aria-selected="false">Casa</button>
+          <button type="button" class="task-category" data-cat="Estudos" role="tab" aria-selected="false">Estudos</button>
+          <button type="button" class="task-category" data-cat="Trabalho" role="tab" aria-selected="false">Trabalho</button>
+          <button type="button" class="task-category" data-cat="Saúde" role="tab" aria-selected="false">Saúde</button>
+          <button type="button" class="task-category" data-cat="Outros" role="tab" aria-selected="false">Outros</button>
+        </nav>
+        <div class="head task-toolbar">
           <button class="btn" type="button" id="newTask">Nova tarefa</button>
           <div class="row">
             <label class="inline">Mostrar<select id="fStatus"><option value="todas">Todas</option><option value="pendentes">Pendentes</option><option value="concluidas">Concluídas</option></select></label>
