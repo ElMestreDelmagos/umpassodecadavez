@@ -346,3 +346,321 @@ h1,h2,h3{font-family:Inter,"Segoe UI",Arial,sans-serif;letter-spacing:-.035em;fo
   .calendar-weekdays{font-size:.68rem}
   .day-agenda h2{font-size:1.3rem}
 }
+
+
+/* ===== Melhorias responsivas: tarefas e agenda ===== */
+.task-categories{
+  display:flex;align-items:center;gap:.35rem;
+  width:100%;min-width:0;margin:0 0 1.1rem;padding:.2rem 0 .65rem;
+  overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+}
+.task-category{
+  flex:0 0 auto;min-height:42px;padding:.55rem 1rem;
+  border:0;border-radius:13px;background:transparent;color:var(--muted);
+  font:inherit;font-size:.9rem;font-weight:650;white-space:nowrap;cursor:pointer;
+  transition:background .18s,color .18s;
+}
+.task-category:hover{background:var(--tile);color:var(--text)}
+.task-category.is-active{
+  background:#20c5c0;color:#073f43;
+}
+:root[data-theme="dark"] .task-category.is-active{background:#25c5c2;color:#082b31}
+.task-toolbar{align-items:center}
+.task-toolbar>.row{min-width:0;flex-wrap:wrap}
+#tarefas .head label.inline{min-width:0}
+#tarefas .head select{max-width:100%}
+#agenda .card{min-width:0}
+#agenda .form{min-width:0}
+#agenda .form label{min-width:0}
+#agenda .form input{min-width:0;max-width:100%}
+#agenda .row.wide{min-width:0}
+#agenda .row.wide .btn{flex:0 1 auto}
+#agList .item,#rmList .item{min-width:0;max-width:100%}
+#agList .item .grow,#rmList .item .grow{min-width:0;overflow-wrap:anywhere}
+#agList .time{flex:0 0 3.2rem}
+#agList .acts,#rmList .acts{flex:0 0 auto;min-width:0}
+#agList .acts .sm,#rmList .acts .sm{min-height:40px}
+#agenda .head{min-width:0}
+#agenda .head label.inline{min-width:0}
+#agenda .head input[type="date"]{max-width:100%}
+
+@media(max-width:680px){
+  #tarefas .card,#agenda .card{padding:1rem;border-radius:20px}
+  .task-categories{gap:.25rem;margin-bottom:.9rem;padding-bottom:.55rem}
+  .task-category{min-height:44px;padding:.55rem .9rem;font-size:.88rem}
+  .task-toolbar{align-items:stretch;flex-direction:column}
+  .task-toolbar>#newTask{width:100%}
+  .task-toolbar>.row{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:.55rem}
+  .task-toolbar>.row label.inline{display:flex;flex-direction:column;align-items:stretch;gap:.25rem}
+  .task-toolbar>.row select{width:100%;min-width:0}
+  #agenda .form{grid-template-columns:minmax(0,1fr);gap:.75rem}
+  #agenda .form .wide{grid-column:1}
+  #agenda .form .row.wide{display:flex;flex-direction:column;align-items:stretch}
+  #agenda .form .row.wide .btn{width:100%;min-height:50px}
+  #agenda .head{align-items:stretch;flex-direction:column}
+  #agenda .head label.inline{display:flex;flex-direction:column;align-items:stretch;width:100%}
+  #agenda .head input[type="date"]{width:100%}
+  #agList .item,#rmList .item{
+    display:grid;grid-template-columns:auto minmax(0,1fr);
+    gap:.55rem .7rem;padding:.85rem;
+  }
+  #agList .item>input[type="checkbox"]{grid-column:1;grid-row:1}
+  #agList .item .time{grid-column:2;grid-row:1;min-width:0}
+  #agList .item .grow{grid-column:1/-1;grid-row:2}
+  #agList .item .acts,#rmList .item .acts{
+    grid-column:1/-1;display:flex;justify-content:flex-start;flex-wrap:wrap;
+  }
+  #rmList .item>span{grid-column:1;grid-row:1}
+  #rmList .item .grow{grid-column:1/-1;grid-row:2}
+  #agList .acts .sm,#rmList .acts .sm{flex:1 1 0;min-height:44px}
+  #agenda .timeline{margin-left:.35rem;padding-left:.8rem}
+  #agenda .timeline .item::before{left:-1.42rem}
+  #agenda .card h2{overflow-wrap:anywhere}
+}
+@media(max-width:380px){
+  .task-toolbar>.row{grid-template-columns:1fr}
+  #agenda .card{padding:.85rem}
+  #agList .item,#rmList .item{padding:.75rem}
+}
+
+
+/* ===== Ajustes finos: tags de tarefas e Quebre sua tarefa ===== */
+/* Tags ficam alinhadas, quebram linha sem estourar o cartão e mantêm respiro uniforme. */
+#taskList .item{
+  align-items:flex-start;
+  gap:.75rem;
+  padding:1rem 1.1rem;
+}
+#taskList .item > input[type="checkbox"]{margin-top:.18rem;flex:0 0 1.5rem}
+#taskList .item .grow{min-width:0;flex:1 1 220px}
+#taskList .item .grow > strong{display:block;overflow-wrap:anywhere}
+#taskList .item .grow > .muted{margin:.3rem 0 0;overflow-wrap:anywhere}
+#taskList .meta{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:.45rem;
+  margin:.65rem 0 0;
+  min-width:0;
+}
+#taskList .tag{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  max-width:100%;
+  min-height:27px;
+  padding:.22rem .7rem;
+  line-height:1.25;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  border-radius:999px;
+}
+#taskList .acts{flex:0 0 auto;align-self:center;gap:.45rem}
+
+/* A área de dividir tarefas usa cartões compactos e etapas bem espaçadas. */
+#quebre{min-width:0}
+#quebre .card{min-width:0}
+#quebre #formProj{display:flex;align-items:flex-end;gap:.75rem;min-width:0}
+#quebre #formProj .grow{flex:1 1 260px;min-width:0}
+#quebre #formProj .btn{flex:0 0 auto;white-space:normal}
+#projList{display:grid;gap:.85rem;min-width:0}
+#projList > .card{margin:0;padding:1.25rem 1.35rem;border-radius:24px}
+#projList .proj-h{align-items:flex-start;margin-bottom:.65rem}
+#projList .proj-h h2{min-width:0;flex:1 1 220px;overflow-wrap:anywhere;margin:0}
+#projList .proj-h .acts{gap:.4rem}
+#projList .bar{margin:.55rem 0}
+#projList .steps{
+  display:flex;
+  flex-direction:column;
+  gap:.5rem;
+  margin:.85rem 0 1rem;
+  padding:0;
+}
+#projList .steps .item{
+  display:flex;
+  align-items:center;
+  gap:.7rem;
+  min-width:0;
+  padding:.7rem .85rem;
+  border-radius:16px;
+}
+#projList .steps .item > input[type="checkbox"]{flex:0 0 1.5rem;margin:0}
+#projList .steps .item .grow{flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
+#projList .steps .item .acts{display:flex;flex:0 0 auto;gap:.35rem}
+#projList .add-step{display:flex;align-items:center;gap:.6rem;min-width:0;margin-top:.75rem}
+#projList .add-step input{flex:1 1 220px;min-width:0}
+#projList .add-step .btn{flex:0 0 auto}
+
+@media(max-width:680px){
+  #taskList{gap:.65rem}
+  #taskList .item{
+    display:grid;
+    grid-template-columns:1.5rem minmax(0,1fr);
+    gap:.45rem .65rem;
+    padding:.85rem;
+    border-radius:18px;
+  }
+  #taskList .item > input[type="checkbox"]{grid-column:1;grid-row:1;margin-top:.15rem}
+  #taskList .item .grow{grid-column:2;grid-row:1;min-width:0}
+  #taskList .meta{gap:.35rem;margin-top:.55rem}
+  #taskList .tag{font-size:.74rem;min-height:26px;padding:.2rem .6rem}
+  #taskList .acts{
+    grid-column:1/-1;
+    display:flex;
+    justify-content:flex-end;
+    align-self:auto;
+    padding-top:.15rem;
+  }
+  #taskList .acts .sm{min-height:40px;padding:.45rem .85rem}
+  #quebre #formProj{flex-direction:column;align-items:stretch;gap:.7rem}
+  #quebre #formProj .grow{width:100%;flex:auto}
+  #quebre #formProj .btn{width:100%;min-height:48px}
+  #projList{gap:.7rem}
+  #projList > .card{padding:1rem;border-radius:20px}
+  #projList .proj-h{flex-direction:column;align-items:stretch;gap:.65rem}
+  #projList .proj-h h2{font-size:1.15rem}
+  #projList .proj-h .acts{justify-content:flex-start}
+  #projList .steps{gap:.45rem;margin:.75rem 0 .9rem}
+  #projList .steps .item{
+    display:grid;
+    grid-template-columns:1.4rem minmax(0,1fr);
+    gap:.45rem .6rem;
+    padding:.7rem;
+  }
+  #projList .steps .item > input[type="checkbox"]{grid-column:1;grid-row:1}
+  #projList .steps .item .grow{grid-column:2;grid-row:1}
+  #projList .steps .item .acts{
+    grid-column:1/-1;
+    justify-content:flex-end;
+    padding-top:.1rem;
+  }
+  #projList .steps .item .acts .sm{min-height:40px}
+  #projList .add-step{flex-direction:column;align-items:stretch;gap:.55rem}
+  #projList .add-step input{width:100%;min-height:46px}
+  #projList .add-step .btn{width:100%;min-height:48px}
+}
+@media(max-width:380px){
+  #taskList .item{padding:.75rem}
+  #taskList .meta{gap:.3rem}
+  #taskList .tag{font-size:.7rem}
+  #projList > .card{padding:.85rem}
+  #projList .steps .item{padding:.65rem}
+  #projList .steps .item .acts{justify-content:stretch}
+  #projList .steps .item .acts .sm{flex:1 1 0;padding:.4rem .55rem}
+}
+
+
+/* ===== Quebre sua tarefa: layout compacto (correção de espaços vazios) ===== */
+#projList > .card{
+  padding:1rem 1.1rem;
+}
+#projList .proj-h{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:space-between;
+  gap:.5rem;
+  margin:0 0 .45rem;
+}
+#projList .proj-h h2{
+  flex:1 1 auto;
+  min-width:0;
+  margin:0;
+  line-height:1.25;
+}
+#projList .proj-h .acts{
+  display:flex;
+  flex:0 0 auto;
+  flex-direction:row;
+  justify-content:flex-end;
+  gap:.35rem;
+  margin:0;
+}
+#projList .bar{margin:.4rem 0}
+#projList > .card > p.muted{margin:.35rem 0 .65rem;line-height:1.45}
+#projList .steps{margin:.55rem 0 .65rem;gap:.4rem}
+#projList .add-step{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:.55rem;
+  margin:0;
+}
+#projList .add-step input{
+  flex:1 1 auto;
+  width:auto;
+  min-width:0;
+  height:46px;
+  min-height:46px;
+  max-height:46px;
+  padding:.65rem .85rem;
+}
+#projList .add-step .btn{
+  flex:0 0 auto;
+  width:auto;
+  min-height:46px;
+  padding:.65rem 1.1rem;
+}
+@media(max-width:680px){
+  #projList > .card{padding:.9rem;border-radius:18px}
+  #projList .proj-h{
+    flex-direction:row;
+    align-items:center;
+    gap:.4rem;
+    margin-bottom:.4rem;
+  }
+  #projList .proj-h h2{font-size:1.05rem}
+  #projList .proj-h .acts{gap:.25rem}
+  #projList .proj-h .acts .sm{padding:.4rem .65rem;min-height:38px;font-size:.82rem}
+  #projList .bar{height:10px;margin:.35rem 0}
+  #projList > .card > p.muted{font-size:.9rem;margin:.3rem 0 .55rem}
+  #projList .steps{margin:.45rem 0 .55rem;gap:.35rem}
+  #projList .steps .item{padding:.55rem .65rem;gap:.4rem .55rem}
+  #projList .add-step{
+    flex-direction:column;
+    align-items:stretch;
+    gap:.45rem;
+    margin:0;
+  }
+  #projList .add-step input{
+    flex:0 0 46px;
+    width:100%;
+    height:46px;
+    min-height:46px;
+    max-height:46px;
+  }
+  #projList .add-step .btn{width:100%;min-height:46px;padding:.6rem 1rem}
+}
+@media(max-width:380px){
+  #projList > .card{padding:.8rem}
+  #projList .proj-h h2{font-size:1rem}
+  #projList .proj-h .acts .sm{font-size:.78rem;padding:.35rem .55rem}
+}
+
+
+/* ===== Quebre sua tarefa: dimensões proporcionais e sem áreas vazias ===== */
+#projList > .card{display:block;height:auto;min-height:0;padding:1rem}
+#projList .proj-h{display:flex;flex-flow:row nowrap;align-items:center;justify-content:space-between;height:auto;min-height:0;gap:.5rem;margin:0 0 .55rem}
+#projList .proj-h h2{flex:1 1 auto;min-width:0;margin:0;line-height:1.2}
+#projList .proj-h .acts{flex:0 0 auto;display:flex;flex-flow:row nowrap;align-items:center;gap:.35rem;margin:0}
+#projList .bar{height:9px;margin:.35rem 0}
+#projList > .card > p.muted{margin:.35rem 0 .6rem;line-height:1.4}
+#projList .add-step{display:flex;flex-direction:column;align-items:stretch;gap:.45rem;width:100%;height:auto;min-height:0;margin:0}
+#projList .add-step input,#projList .add-step input[type="text"]{display:block;box-sizing:border-box;flex:none;width:100%;height:44px!important;min-height:44px!important;max-height:44px!important;padding:.55rem .85rem;line-height:1.2;margin:0}
+#projList .add-step .btn{display:inline-flex;box-sizing:border-box;flex:none;width:100%;height:44px;min-height:44px;max-height:44px;padding:.55rem 1rem;margin:0}
+#projList .steps{margin:.5rem 0 .6rem;gap:.35rem}
+#projList .steps .item{padding:.55rem .7rem}
+@media(max-width:680px){
+ #projList > .card{padding:.85rem}
+ #projList .proj-h{flex-wrap:nowrap;gap:.35rem;margin-bottom:.45rem}
+ #projList .proj-h h2{font-size:1rem;line-height:1.2}
+ #projList .proj-h .acts{gap:.2rem}
+ #projList .proj-h .acts .sm{min-height:34px;height:34px;padding:.3rem .55rem;font-size:.78rem;white-space:nowrap}
+ #projList > .card > p.muted{font-size:.88rem;margin:.3rem 0 .55rem}
+ #projList .add-step{gap:.4rem}
+ #projList .add-step input,#projList .add-step input[type="text"]{height:42px!important;min-height:42px!important;max-height:42px!important}
+ #projList .add-step .btn{height:42px;min-height:42px;max-height:42px}
+}
+@media(max-width:360px){#projList .proj-h h2{font-size:.94rem}#projList .proj-h .acts .sm{font-size:.73rem;padding:.25rem .42rem}}
